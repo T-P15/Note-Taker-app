@@ -37,7 +37,8 @@ app.post('/api/notes', (req, res) => {
     res.json(databaseNotes);
 });
 
-app.delete('/api/notes', (req, res) => {
+app.delete('/api/notes/:id', (req, res) => {
+    console.log("delete id=",req.params.id)
     let databaseNotes= JSON.parse(fs.readFileSync("./db/db.json", "utf-8"));
     let deleteID= req.params.id
     let newID= 0
