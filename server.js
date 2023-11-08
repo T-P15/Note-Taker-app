@@ -37,6 +37,23 @@ app.post('/api/notes', (req, res) => {
     res.json(databaseNotes);
 });
 
+app.delete('/api/notes', (req, res) => {
+    let databaseNotes= JSON.parse(fs.readFileSync("./db/db.json", "utf-8"));
+    let deleteID= req.params.id
+    let newID= 0
+    databaseNotes= databaseNotes.filter((note) => {
+        return note.id != deleteID;
+    });
+
+    for (note of databaseNotes){
+        note.id= newID.toString();
+        newID++;
+    };
+
+    fs.writeFileSync("./db/db.json", JSON.stringify(databaseNotes));
+    res.json(databaseNotes);
+});
+
 
 // GET Route for *
 app.get('*', (req, res) =>
