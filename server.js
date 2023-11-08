@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const fs = require("fs");
 
 const PORT = process.env.PORT || 3001;
 
@@ -23,6 +24,19 @@ app.get('/notes', (req, res) =>
 app.get('/api/notes', (req, res) =>
   res.sendFile(path.join(__dirname, '/db/db.json'))
 );
+
+// POST Route for /api/notes
+app.post('/api/notes', (req, res) => {
+    let databaseNotes= JSON.parse(fs.readFileSync("./db/db.json", "utf-8"));
+    let createNote= req.body;
+    let newID= databaseNotes.length.toString();
+    createNote.id= newID;
+    databaseNotes.push(createNote);
+
+    fs.writeFileSync("./db/db.json", JSON.stringify(databaseNotes));
+    res.json(databaseNotes);
+});
+
 
 // GET Route for *
 app.get('*', (req, res) =>
